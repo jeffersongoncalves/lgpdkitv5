@@ -1,17 +1,18 @@
 <div class="filament-hidden">
 
-![FilaKit](https://raw.githubusercontent.com/jeffersongoncalves/filakitv5/main/art/jeffersongoncalves-filakitv5.png)
+![LgpdKit](https://raw.githubusercontent.com/jeffersongoncalves/lgpdkitv5/main/art/jeffersongoncalves-lgpdkitv5.png)
 
 </div>
 
-# FilaKit Start Kit Filament 5.x and Laravel 13.x
+# LgpdKit Start Kit Filament 5.x and Laravel 13.x
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/jeffersongoncalves)
 
-## About FilaKit
+## About LgpdKit
 
-FilaKit is a robust starter kit built on Laravel 13.x and Filament 5.x, designed to accelerate the development of modern
-web applications with a ready-to-use multi-panel structure.
+LgpdKit is a robust starter kit built on Laravel 13.x and Filament 5.x, designed to accelerate the development of modern
+web applications with a ready-to-use multi-panel structure and the LGPD privacy suite already installed: the tooling for
+Brazil's LGPD (Lei 13.709/2018), managed from the Admin panel.
 
 ## Features
 
@@ -21,7 +22,8 @@ web applications with a ready-to-use multi-panel structure.
     - Admin Panel (`/admin`) - For system administrators
     - App Panel (`/app`) - For authenticated application users
     - Public Panel (frontend interface) - For visitors
-- **Environment Configuration** - Centralized configuration through the `config/filakit.php` file
+- **LGPD privacy suite** - every `laravel-lgpd*` package and its `filament-lgpd*` plugin (3.x), wired into the Admin panel
+- **Environment Configuration** - Centralized configuration through the `config/lgpdkit.php` file
 
 ## System Requirements
 
@@ -33,7 +35,7 @@ web applications with a ready-to-use multi-panel structure.
 
 Clone the repository
 ``` bash
-laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
+laravel new my-app --using=jeffersongoncalves/lgpdkitv5 --database=mysql
 ```
 
 ### Using FilaKit CLI
@@ -41,14 +43,14 @@ laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
 Or use [FilaKit CLI](https://github.com/jeffersongoncalves/filakit-cli) for a simplified setup:
 
 ```bash
-filakit new my-app --kit=jeffersongoncalves/filakitv5
+filakit new my-app --kit=jeffersongoncalves/lgpdkitv5
 ```
 
 > Install FilaKit CLI: `composer global require jeffersongoncalves/filakit-cli`
 
 ###  Easy Installation
 
-FilaKit can be easily installed using the following command:
+LgpdKit can be easily installed using the following command:
 
 ```bash
 php install.php
@@ -99,7 +101,7 @@ php artisan serve
 
 Clone the repository
 ```bash
-laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
+laravel new my-app --using=jeffersongoncalves/lgpdkitv5 --database=mysql
 ```
 
 Move into the project directory
@@ -154,9 +156,36 @@ Install JavaScript dependencies
 pnpm install
 ```
 
+## LGPD privacy suite
+
+The kit ships the whole LGPD suite for Brazil's LGPD (Lei 13.709/2018):
+
+| Package | Filament plugin |
+|---|---|
+| [laravel-lgpd](https://github.com/jeffersongoncalves/laravel-lgpd) | [filament-lgpd](https://github.com/jeffersongoncalves/filament-lgpd) |
+| [laravel-lgpd-consent](https://github.com/jeffersongoncalves/laravel-lgpd-consent) | [filament-lgpd-consent](https://github.com/jeffersongoncalves/filament-lgpd-consent) |
+| [laravel-lgpd-dsar](https://github.com/jeffersongoncalves/laravel-lgpd-dsar) | [filament-lgpd-dsar](https://github.com/jeffersongoncalves/filament-lgpd-dsar) |
+| [laravel-lgpd-retention](https://github.com/jeffersongoncalves/laravel-lgpd-retention) | [filament-lgpd-retention](https://github.com/jeffersongoncalves/filament-lgpd-retention) |
+| [laravel-lgpd-audit-log](https://github.com/jeffersongoncalves/laravel-lgpd-audit-log) | [filament-lgpd-audit-log](https://github.com/jeffersongoncalves/filament-lgpd-audit-log) |
+| [laravel-lgpd-incidents](https://github.com/jeffersongoncalves/laravel-lgpd-incidents) | [filament-lgpd-incidents](https://github.com/jeffersongoncalves/filament-lgpd-incidents) |
+| [laravel-lgpd-records](https://github.com/jeffersongoncalves/laravel-lgpd-records) | [filament-lgpd-records](https://github.com/jeffersongoncalves/filament-lgpd-records) |
+| [laravel-lgpd-vendors](https://github.com/jeffersongoncalves/laravel-lgpd-vendors) | [filament-lgpd-vendors](https://github.com/jeffersongoncalves/filament-lgpd-vendors) |
+| [laravel-lgpd-ripd](https://github.com/jeffersongoncalves/laravel-lgpd-ripd) | [filament-lgpd-ripd](https://github.com/jeffersongoncalves/filament-lgpd-ripd) |
+| [laravel-lgpd-minors](https://github.com/jeffersongoncalves/laravel-lgpd-minors) | [filament-lgpd-minors](https://github.com/jeffersongoncalves/filament-lgpd-minors) |
+| [laravel-lgpd-takedown](https://github.com/jeffersongoncalves/laravel-lgpd-takedown) | [filament-lgpd-takedown](https://github.com/jeffersongoncalves/filament-lgpd-takedown) |
+
+- `App\Models\User` is the data subject: it implements `HasPersonalData` and declares its `name` and `email` with `#[PersonalData]`.
+  Declare every personal column you add, on this model and on your own models, and list those models in `config/lgpd.php`.
+- The migrations are already in `database/migrations`: `php artisan migrate` creates every table of the suite.
+- Every plugin is registered in `app/Providers/Filament/AdminPanelProvider.php`, under the **LGPD** navigation group.
+- `tests/Feature/LgpdSuiteTest.php` checks the declarations and opens every page of the suite.
+
+Each package's README explains its configuration, events and scheduled commands. The suite gives you tooling: it does not make
+you compliant on its own, you still need legal review.
+
 ## Authentication Structure
 
-FilaKit comes pre-configured with a custom authentication system that supports different types of users:
+LgpdKit comes pre-configured with a custom authentication system that supports different types of users:
 
 - `Admin` - For administrative panel access
 - `User` - For application panel access
@@ -183,16 +212,16 @@ Panels can be customized through their respective providers:
 - `app/Providers/Filament/AppPanelProvider.php`
 - `app/Providers/Filament/PublicPanelProvider.php`
 
-Alternatively, these settings are also consolidated in the `config/filakit.php` file for easier management.
+Alternatively, these settings are also consolidated in the `config/lgpdkit.php` file for easier management.
 
 ### Themes and Colors
 
 Each panel can have its own color scheme, which can be easily modified in the corresponding Provider files or in the
-`filakit.php` configuration file.
+`lgpdkit.php` configuration file.
 
 ### Configuration File
 
-The `config/filakit.php` file centralizes the configuration of the starter kit, including:
+The `config/lgpdkit.php` file centralizes the configuration of the starter kit, including:
 
 - Panel routes
 - Middleware for each panel
@@ -286,7 +315,7 @@ Reference
 
 ## Resources
 
-FilaKit includes support for:
+LgpdKit includes support for:
 
 - User and admin management
 - Multi-guard authentication system
